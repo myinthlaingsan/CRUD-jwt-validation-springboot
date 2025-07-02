@@ -10,7 +10,11 @@ import org.springframework.context.annotation.Configuration;
 public class ModelMapperConfig {
     @Bean
     public ModelMapper modelMapper(){
+        ModelMapper modelMapper = new ModelMapper();
 
-        return new ModelMapper();
+        modelMapper.typeMap(User.class, UserDto.class)
+                .addMappings(mapper ->
+                mapper.skip(UserDto::setPassword));
+        return modelMapper;
     }
 }

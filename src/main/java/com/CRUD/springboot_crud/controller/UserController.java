@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("api/v1/user")
 public class UserController {
     @Autowired
     private UserServiceImpl userService;
@@ -50,9 +50,5 @@ public class UserController {
         return ResponseMessage.success(users);
     }
 
-    @PostMapping("/login")
-    public String login(@RequestBody User user){
-        return userService.verify(user);
-    }
 
 }

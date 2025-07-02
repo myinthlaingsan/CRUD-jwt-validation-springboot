@@ -50,9 +50,10 @@ public class SecurityConfig {
         return http.cors(cors-> Customizer.withDefaults())
                 .csrf(csrf->csrf.disable())
                 .authorizeHttpRequests(auth->auth
-                        .requestMatchers("/user/**").permitAll()
-                        .requestMatchers("/post/**").authenticated()
-                        .requestMatchers("/role/**").hasRole("ADMIN")
+                        .requestMatchers("api/v1/auth/**").permitAll()
+                        .requestMatchers("api/v1/user/**").authenticated()
+                        .requestMatchers("api/v1/post/**").authenticated()
+                        .requestMatchers("api/v1/role/**").hasRole("ADMIN")
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",

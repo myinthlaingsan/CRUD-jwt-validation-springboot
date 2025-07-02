@@ -2,8 +2,10 @@ package com.CRUD.springboot_crud.service.Impl;
 
 import com.CRUD.springboot_crud.exception.ResourceNotFoundException;
 import com.CRUD.springboot_crud.pojo.Post;
+import com.CRUD.springboot_crud.pojo.Role;
 import com.CRUD.springboot_crud.pojo.User;
 import com.CRUD.springboot_crud.pojo.dto.PostDto;
+import com.CRUD.springboot_crud.pojo.dto.UserDto;
 import com.CRUD.springboot_crud.repository.PostRepository;
 import com.CRUD.springboot_crud.repository.UserRepositroy;
 import com.CRUD.springboot_crud.service.PostService;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,9 +35,21 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostDto> getAllPosts() {
         List<Post> posts = postRepository.findAll();
-        return posts.stream()
-                .map(post->modelMapper.map(post, PostDto.class))
-                .collect(Collectors.toList());
+//        return posts.stream()
+//                .map(post->modelMapper.map(post, PostDto.class))
+//                .collect(Collectors.toList());
+
+        return posts.stream().map(post->{
+            PostDto postDto = modelMapper.map(post,PostDto.class);
+            User user = post.getUser();
+            UserDto userDto = modelMapper.map(user,UserDto.class);
+            Set<Integer> roleId = user.getRoles().stream()
+                    .map(Role::getRoleId)
+                    .collect(Collectors.toSet());
+            userDto.setRoleId(roleId);
+            postDto.setUser(userDto);
+            return postDto;
+        }).collect(Collectors.toList());
     }
 
     @Override
